@@ -6,7 +6,7 @@ public class OrderHolderInitialiser implements QueryHolder {
 	
 	private String QUERY_STATEMENT = "select customerSlang, customerName, lastMkt, symbol, execType, orderQty, orderNotional, execNotional, executedQty, numberOfOrders from com.citi.agg.orderholder.OrderHolder group by customerSlang, customerName, symbol, lastMkt";
 	private String AGGREGATION_WINDOW_CREATE = "create window AggregationSet.win:keepall() as (customerSlang string, customerName string, lastMkt string, symbol string, orderQty double, executedQty double, orderNotional double, execNotional double, numberOfOrders long)";
-	private String AGGREGATION_RETURN_QUERY = "select customerName, sum(orderNotional) as orderNotional, sum(execNotional) as execNotional, sum(orderQty) as orderQty, sum(executedQty) as executedQty, sum(numberOfOrders) as numberOfOrders from AggregationSet group by customerName";
+	private String AGGREGATION_RETURN_QUERY = "select customerName, sum(orderNotional) as orderNotional, sum(execNotional) as execNotional, sum(orderQty) as orderQty, sum(executedQty) as executedQty, sum(numberOfOrders) as numberOfOrders from AggregationSet group by customerName order by orderNotional desc";
 	private String AGGREGATION_MERGE_CRITERIA = "on com.citi.agg.orderholder.OrderHolder ce merge AggregationSet tf where "
 			+"ce.customerSlang = tf.customerSlang and ce.customerName = tf.customerName and ce.lastMkt = tf.lastMkt and ce.symbol = tf.symbol "
 			+"when not matched then insert select customerSlang, customerName, lastMkt, symbol, orderQty, orderNotional, execNotional, executedQty, numberOfOrders "
